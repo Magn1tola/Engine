@@ -13,12 +13,78 @@ Matrix4x4::Matrix4x4() {
 }
 
 Matrix4x4::Matrix4x4(float value) {
-    for (float & m1 : m) m1 = value;
+    for (float &m1: m) m1 = value;
 }
 
 void Matrix4x4::identity() {
     for (float &i: m) i = 0;
     m[0] = m[5] = m[10] = m[15] = 1.0f;
+}
+
+Vector3 Matrix4x4::extractPosition() const {
+    return {
+        m[12], m[13], m[14]
+    };
+}
+
+Quaternion Matrix4x4::extractRotation() const {
+    Quaternion rotation;
+
+    if (const Vector3 scale = extractScale(); scale.GetMagnitude() != 0.0f) {
+        Matrix4x4 rotationMatrix;
+
+        rotationMatrix.m[0] = m[0] / scale.x;
+        rotationMatrix.m[1] = m[1] / scale.x;
+        rotationMatrix.m[2] = m[2] / scale.x;
+
+        rotationMatrix.m[4] = m[4] / scale.y;
+        rotationMatrix.m[5] = m[5] / scale.y;
+        rotationMatrix.m[6] = m[6] / scale.y;
+
+        rotationMatrix.m[8] = m[8] / scale.z;
+        rotationMatrix.m[9] = m[9] / scale.z;
+        rotationMatrix.m[10] = m[10] / scale.z;
+
+        rotationMatrix.m[15] = 1.0f;
+
+        if (const float trace = rotationMatrix.m[0] + rotationMatrix.m[5] + rotationMatrix.m[10]; trace > 0) {
+            float s = 0.5f / sqrtf(trace + 1.0f);
+            rotation.w = 0.25f / s;
+            rotation.x = (rotationMatrix.m[6] - rotationMatrix.m[9]) * s;
+            rotation.y = (rotationMatrix.m[8] - rotationMatrix.m[2]) * s;
+            rotation.z = (rotationMatrix.m[1] - rotationMatrix.m[4]) * s;
+        } else {
+            if (rotationMatrix.m[0] > rotationMatrix.m[5] && rotationMatrix.m[0] > rotationMatrix.m[10]) {
+                const float s = 2.0f * sqrtf(1.0f + rotationMatrix.m[0] - rotationMatrix.m[5] - rotationMatrix.m[10]);
+                rotation.w = (rotationMatrix.m[6] - rotationMatrix.m[9]) / s;
+                rotation.x = 0.25f * s;
+                rotation.y = (rotationMatrix.m[4] + rotationMatrix.m[1]) / s;
+                rotation.z = (rotationMatrix.m[8] + rotationMatrix.m[2]) / s;
+            } else if (rotationMatrix.m[5] > rotationMatrix.m[10]) {
+                const float s = 2.0f * sqrtf(1.0f + rotationMatrix.m[5] - rotationMatrix.m[0] - rotationMatrix.m[10]);
+                rotation.w = (rotationMatrix.m[8] - rotationMatrix.m[2]) / s;
+                rotation.x = (rotationMatrix.m[4] + rotationMatrix.m[1]) / s;
+                rotation.y = 0.25f * s;
+                rotation.z = (rotationMatrix.m[9] + rotationMatrix.m[6]) / s;
+            } else {
+                const float s = 2.0f * sqrtf(1.0f + rotationMatrix.m[10] - rotationMatrix.m[0] - rotationMatrix.m[5]);
+                rotation.w = (rotationMatrix.m[1] - rotationMatrix.m[4]) / s;
+                rotation.x = (rotationMatrix.m[8] + rotationMatrix.m[2]) / s;
+                rotation.y = (rotationMatrix.m[9] + rotationMatrix.m[6]) / s;
+                rotation.z = 0.25f * s;
+            }
+        }
+        rotation.normalize();
+    }
+    return rotation;
+}
+
+Vector3 Matrix4x4::extractScale() const {
+    return {
+        Vector3(m[0], m[1], m[2]).GetMagnitude(),
+        Vector3(m[4], m[5], m[6]).GetMagnitude(),
+        Vector3(m[8], m[9], m[10]).GetMagnitude()
+    };
 }
 
 Matrix4x4 Matrix4x4::translation(const Vector3 &translation) {

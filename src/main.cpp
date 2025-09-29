@@ -47,6 +47,10 @@ bool initGlew(GLFWwindow *window) {
     glfwGetFramebufferSize(window, &width, &height);
 
     glViewport(0, 0, width, height);
+
+    glEnable(GL_DEPTH_TEST);
+    glClearColor(0.1, 0.2, 0.3, 1);
+
     return true;
 }
 
@@ -59,21 +63,36 @@ int main() {
     const GLuint shader = ShaderLoader::createShaderProgram("shader", "assets/shaders/");
     glUseProgram(shader);
 
-    glEnable(GL_DEPTH_TEST);
-
     GLuint vp_uniform = glGetUniformLocation(shader, "vp"); // 1
     GLuint model_uniform = glGetUniformLocation(shader, "model"); // 0
 
     auto *world = new World();
     Render *render = world->getRender();
+
+    // Begin test
+
     auto camera = world->spawnEntity<CameraEntity>();
+    camera->transform->translate(Vector3(0, 0, -8));
+
     auto entity = world->spawnEntity<QuadMeshEntity>();
-    entity->transform->position->z = -2;
+
+    auto entity2 = world->spawnEntity<QuadMeshEntity>();
+    entity2->transform->translate(Vector3(0, 0, -2));
+    entity2->transform->rotate(Vector3(35, 0, 20));
+    entity2->transform->setScale(Vector3(0.5f));
+
+    auto entity3 = world->spawnEntity<QuadMeshEntity>();
+    entity3->transform->translate(Vector3(0, 0, -3));
+    entity3->transform->setScale(Vector3(0.5f));
+
+    entity2->transform->setParent(*entity3->transform);
+    entity3->transform->setParent(*entity->transform);
+
+    // End test
 
     float lastTime = 0;
     float currentTime = 0;
     float deltaTime = 0.0f;
-
 
     while (!glfwWindowShouldClose(window)) {
         currentTime = glfwGetTime();

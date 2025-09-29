@@ -6,7 +6,6 @@
 
 #include "components/QuadMeshComponent.h"
 #include "math/Transform.h"
-#include "math/Vector3.h"
 
 QuadMeshEntity::QuadMeshEntity() {
     bCanBeUpdated = true;

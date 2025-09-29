@@ -8,11 +8,11 @@
 
 class CameraComponent;
 
-class CameraEntity : public Entity{
+class CameraEntity : public Entity {
 public:
     CameraEntity();
 
-    CameraComponent* camera;
+    CameraComponent *camera;
 
     void onSpawned() override;
 };

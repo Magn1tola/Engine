@@ -5,10 +5,11 @@
 #pragma once
 
 
-struct Vector3;
-struct Matrix4x4;
+class Vector3;
+class Matrix4x4;
 
-struct Quaternion {
+class Quaternion {
+public:
     float x, y, z, w;
 
     Quaternion();

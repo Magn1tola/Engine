@@ -4,7 +4,8 @@
 
 #pragma once
 
-struct  Vector3 {
+class Vector3 {
+public:
     Vector3();
 
     explicit Vector3(const float value)

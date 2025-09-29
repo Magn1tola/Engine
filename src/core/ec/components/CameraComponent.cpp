@@ -4,17 +4,22 @@
 
 #include "CameraComponent.h"
 
+#include "Entity.h"
 #include "math/Matrix4x4.h"
 #include "math/Transform.h"
 
-CameraComponent::CameraComponent() = default;
+CameraComponent::CameraComponent() {
+    bCanBeUpdated = true;
+}
 
-Matrix4x4 CameraComponent::GetViewProjectionMatrix() const {
+Matrix4x4 CameraComponent::GetProjectionMatrix() const {
     switch (projectionType) {
         case PT_PERSPECTIVE:
-            return Matrix4x4::perspective(fov, aspectRatio, nearPlane, farPlane) * transform->getTransformMatrix();
+            return Matrix4x4::perspective(fov, aspectRatio, nearPlane, farPlane);
         case PT_ORTHOGRAPHIC:
-            return Matrix4x4::orthographic(-1, 1, -1, 1, nearPlane, farPlane) * transform->getTransformMatrix();
+            const float halfHeight = size / 2;
+            const float halfWidth = halfHeight * aspectRatio;
+            return Matrix4x4::orthographic(-halfWidth, halfWidth, -halfHeight, halfHeight, nearPlane, farPlane);
     }
     return {};
 }

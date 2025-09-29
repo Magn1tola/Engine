@@ -4,36 +4,66 @@
 
 #pragma once
 
-class Matrix4x4;
-struct Vector3;
-struct Quaternion;
+#include "Matrix4x4.h"
+#include "Quaternion.h"
+#include "Vector3.h"
 
 class Transform {
 public:
     Transform();
 
-    Vector3 *position;
-    Quaternion *rotation;
-    Vector3 *scale;
+    [[nodiscard]] const Vector3 *getPosition() const {
+        return &position;
+    }
 
-    void setPosition(const Vector3 &newPosition) const;
+    [[nodiscard]] const Quaternion *getRotation() const {
+        return &rotation;
+    }
 
-    void setRotation(const Quaternion &newRotation) const;
+    [[nodiscard]] const Vector3 *getScale() const {
+        return &scale;
+    }
 
-    void setRotation(const Vector3 &eulerAngles) const;
+    Vector3 getWorldPosition();
 
-    void setScale(const Vector3 &newScale) const;
+    Quaternion getWorldRotation();
 
-    void translate(const Vector3 &translation) const;
+    Vector3 getWorldScale();
 
-    void rotate(const Quaternion &rotation) const;
+    void setParent(Transform &newParent);
 
-    void rotate(const Vector3 &eulerAngles) const;
+    void setPosition(const Vector3 &newPosition);
 
-    void scaleBy(const Vector3 &scaling) const;
+    void setRotation(const Quaternion &newRotation);
 
-    [[nodiscard]] Matrix4x4 getTransformMatrix() const;
+    void setRotation(const Vector3 &eulerAngles);
+
+    void setScale(const Vector3 &newScale);
+
+    void translate(const Vector3 &translation);
+
+    void rotate(const Quaternion &angles);
+
+    void rotate(const Vector3 &eulerAngles);
+
+    void scaleBy(const Vector3 &scaling);
+
+    [[nodiscard]] Matrix4x4 getTransformMatrix();
 
 protected:
     ~Transform();
+
+private:
+    Vector3 position;
+    Quaternion rotation;
+    Vector3 scale;
+
+    Matrix4x4 worldMatrix;
+
+    Transform *parent;
+
+    bool isDirty = false;
+
+    void updateWorldMatrix();
+    void tryUpdateWorldMatrix();
 };

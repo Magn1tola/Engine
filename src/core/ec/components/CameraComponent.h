@@ -18,12 +18,13 @@ public:
 
     EProjectionType projectionType = PT_PERSPECTIVE;
 
-    float fov = 90;
-    float nearPlane = 0.01f;
-    float farPlane = 1000.0f;
+    float fov = 60.0f;
+    float nearPlane = 0.001f;
+    float farPlane = 100000.0f;
     float aspectRatio = 16.0f / 9.0f;
+    float size = 20.0f;
 
-    [[nodiscard]] Matrix4x4 GetViewProjectionMatrix() const;
+    [[nodiscard]] Matrix4x4 GetProjectionMatrix() const;
 
 protected:
     ~CameraComponent() = default;

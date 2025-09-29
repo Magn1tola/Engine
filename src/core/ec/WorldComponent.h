@@ -13,6 +13,8 @@ public:
     WorldComponent();
 
     Transform* transform;
+
+    void setOwner(Entity &newOwner) override;
 protected:
     ~WorldComponent() = default;
 };

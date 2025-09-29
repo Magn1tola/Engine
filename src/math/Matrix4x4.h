@@ -5,8 +5,8 @@
 #pragma once
 
 
-struct Quaternion;
-struct Vector3;
+class Quaternion;
+class Vector3;
 
 class Matrix4x4 {
 public:
@@ -17,6 +17,10 @@ public:
     float m[16];
 
     void identity();
+
+    [[nodiscard]] Vector3 extractPosition() const;
+    [[nodiscard]] Quaternion extractRotation() const;
+    [[nodiscard]] Vector3 extractScale() const;
 
     static Matrix4x4 translation(const Vector3 &translation);
 

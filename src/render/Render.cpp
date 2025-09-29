@@ -29,7 +29,11 @@ void Render::rendering() {
     if (renderCamera_ == nullptr) return;
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    glUniformMatrix4fv(1, 1, GL_FALSE, renderCamera_->GetViewProjectionMatrix().getData());
+    const Matrix4x4 v = renderCamera_->transform->getTransformMatrix();
+    const Matrix4x4 p = renderCamera_->GetProjectionMatrix();
+    const Matrix4x4 vp = v * p;
+
+    glUniformMatrix4fv(1, 1, GL_FALSE, vp.getData());
 
     for (const RenderRequest request: requests_) {
         glBindVertexArray(request.model->vao);
