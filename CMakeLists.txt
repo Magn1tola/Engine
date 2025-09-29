@@ -12,10 +12,10 @@ include_directories(
 add_executable(Engine src/main.cpp
         src/core/fs/ShaderLoader.cpp
         src/core/fs/ShaderLoader.h
-        src/core/EC/Entity.cpp
-        src/core/EC/Entity.h
-        src/core/EC/EntityComponent.cpp
-        src/core/EC/EntityComponent.h
+        src/core/ec/Entity.cpp
+        src/core/ec/Entity.h
+        src/core/ec/EntityComponent.cpp
+        src/core/ec/EntityComponent.h
         src/core/EngineObject.cpp
         src/core/EngineObject.h
         src/math/Vector3.cpp
@@ -30,8 +30,8 @@ add_executable(Engine src/main.cpp
         src/render/Model.h
         src/core/ec/components/MeshComponent.cpp
         src/core/ec/components/MeshComponent.h
-        src/core/ec/components/quadMeshComponent.cpp
-        src/core/ec/components/quadMeshComponent.h
+        src/core/ec/components/QuadMeshComponent.cpp
+        src/core/ec/components/QuadMeshComponent.h
         src/core/ec/entities/QuadMeshEntity.cpp
         src/core/ec/entities/QuadMeshEntity.h
         src/math/Quaternion.cpp
@@ -50,26 +50,39 @@ add_executable(Engine src/main.cpp
         src/core/ec/WorldComponent.h
 )
 
-find_package(glfw3 CONFIG REQUIRED)
-find_package(GLEW REQUIRED)
+find_package(OpenGL REQUIRED)
+find_package(glfw3 REQUIRED)
+
+if (WIN32)
+    find_package(GLEW REQUIRED)
+    target_link_libraries(Engine PRIVATE
+            OpenGL::GL
+            glfw
+            ${GLEW_LIBRARIES}
+    )
+elseif (UNIX AND NOT APPLE)
+    find_package(PkgConfig REQUIRED)
+    pkg_check_modules(GLEW REQUIRED glew)
+    target_link_libraries(Engine PRIVATE
+            OpenGL::GL
+            glfw
+            ${GLEW_LIBRARIES}
+            GLU
+            dl
+            pthread
+            X11
+    )
+endif()
 
 target_include_directories(Engine PRIVATE
         ${GLEW_INCLUDE_DIRS}
-        ${glfw3_INCLUDE_DIRS}
 )
 
-target_link_libraries(Engine PRIVATE
-        ${GLEW_LIBRARIES}
-        glfw
-)
-
-if (WIN32)
-    target_link_libraries(Engine PRIVATE opengl32)
-endif ()
-
-add_dependencies(Engine PostBuild)
-add_custom_target(PostBuild
+add_custom_target(PostBuild ALL
         COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/assets
         COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/assets ${CMAKE_BINARY_DIR}/assets
         WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+        COMMENT "Copying assets"
 )
+
+add_dependencies(Engine PostBuild)
