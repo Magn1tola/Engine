@@ -4,7 +4,10 @@
 
 #include "QuadMeshComponent.h"
 
+#include <iostream>
 #include <render/Model.h>
+
+#include "fs/AssetManager.h"
 
 QuadMeshComponent::QuadMeshComponent() {
     bCanBeUpdated = true;
@@ -48,5 +51,10 @@ QuadMeshComponent::QuadMeshComponent() {
         7, 3, 0
     };
 
+    auto expected = GET_OR_LOAD_ASSET(Shader, "shader|assets/shaders/");
+    if (expected.has_value())
+        model->shader = expected.value();
+    else
+        std::cout << "Failed to load shader" << std::endl;
     model->load(data, indices, "genericQuadMesh");
 }

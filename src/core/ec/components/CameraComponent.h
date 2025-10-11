@@ -18,11 +18,19 @@ public:
 
     EProjectionType projectionType = PT_PERSPECTIVE;
 
-    float fov = 60.0f;
     float nearPlane = 0.001f;
     float farPlane = 100000.0f;
     float aspectRatio = 16.0f / 9.0f;
+
+    /**
+     * For orthographic projection only
+     **/
     float size = 20.0f;
+
+    /**
+     * For perspective projection only
+     **/
+    float fov = 60.0f;
 
     [[nodiscard]] Matrix4x4 GetProjectionMatrix() const;
 

@@ -10,8 +10,6 @@ include_directories(
 )
 
 add_executable(Engine src/main.cpp
-        src/core/fs/ShaderLoader.cpp
-        src/core/fs/ShaderLoader.h
         src/core/ec/Entity.cpp
         src/core/ec/Entity.h
         src/core/ec/EntityComponent.cpp
@@ -48,6 +46,14 @@ add_executable(Engine src/main.cpp
         src/core/ec/entities/CameraEntity.h
         src/core/ec/WorldComponent.cpp
         src/core/ec/WorldComponent.h
+        src/core/fs/AssetManager.cpp
+        src/core/fs/AssetManager.h
+        src/core/fs/Asset.cpp
+        src/core/fs/Asset.h
+        src/core/fs/AssetLoader.cpp
+        src/core/fs/AssetLoader.h
+        src/core/fs/ShaderAssetLoader.cpp
+        src/core/fs/ShaderAssetLoader.h
 )
 
 find_package(OpenGL REQUIRED)

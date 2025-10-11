@@ -7,10 +7,13 @@
 #include "World.h"
 #include "entities/CameraEntity.h"
 #include "entities/QuadMeshEntity.h"
-#include "fs/ShaderLoader.h"
+#include "fs/AssetManager.h"
+#include "fs/AssetLoader.h"
+#include "fs/ShaderAssetLoader.h"
 #include "math/Transform.h"
 #include "math/Vector3.h"
 #include "render/Render.h"
+#include "render/Shader.h"
 
 
 GLFWwindow *initGlfw() {
@@ -60,17 +63,11 @@ int main() {
 
     if (!initGlew(window)) return -1;
 
-    const GLuint shader = ShaderLoader::createShaderProgram("shader", "assets/shaders/");
-    glUseProgram(shader);
-
-    GLuint vp_uniform = glGetUniformLocation(shader, "vp"); // 1
-    GLuint model_uniform = glGetUniformLocation(shader, "model"); // 0
-
     auto *world = new World();
     Render *render = world->getRender();
+    ASSET_MANAGER.registerAssetLoader<Shader>(std::make_unique<ShaderAssetLoader>());
 
-    // Begin test
-
+    // test level data --->
     auto camera = world->spawnEntity<CameraEntity>();
     camera->transform->translate(Vector3(0, 0, -8));
 
@@ -87,8 +84,7 @@ int main() {
 
     entity2->transform->setParent(*entity3->transform);
     entity3->transform->setParent(*entity->transform);
-
-    // End test
+    // <---
 
     float lastTime = 0;
     float currentTime = 0;
@@ -105,8 +101,6 @@ int main() {
         glfwPollEvents();
         glfwSwapBuffers(window);
     }
-
-    glDeleteProgram(shader);
 
     glfwTerminate();
     return 0;

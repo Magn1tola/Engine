@@ -5,12 +5,15 @@
 #include "Render.h"
 
 #include <iostream>
+#include <memory>
 #include <GL/glew.h>
 
+#include "Shader.h"
 #include "components/CameraComponent.h"
 #include "math/Matrix4x4.h"
 #include "math/Transform.h"
 #include "render/Model.h"
+#include "fs/AssetManager.h"
 
 RenderRequest::RenderRequest(Model &model, Transform &transform) {
     this->model = &model;
@@ -33,12 +36,12 @@ void Render::rendering() {
     const Matrix4x4 p = renderCamera_->GetProjectionMatrix();
     const Matrix4x4 vp = v * p;
 
-    glUniformMatrix4fv(1, 1, GL_FALSE, vp.getData());
-
     for (const RenderRequest request: requests_) {
+        request.model->shader->use();
         glBindVertexArray(request.model->vao);
+        request.model->shader->set_uniform("vp", vp);
         Matrix4x4 transform = request.transform->getTransformMatrix();
-        glUniformMatrix4fv(0, 1, GL_FALSE, transform.getData());
+        request.model->shader->set_uniform("model", transform);
         glDrawElements(GL_TRIANGLES, request.model->elementsCount, GL_UNSIGNED_INT, nullptr);
     }
 

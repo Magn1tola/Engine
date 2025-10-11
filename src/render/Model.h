@@ -3,9 +3,11 @@
 //
 
 #pragma once
+#include <memory>
 #include <string>
 #include <vector>
 
+#include "Shader.h"
 #include "../math/Vector3.h"
 
 class Transform;
@@ -22,6 +24,8 @@ public:
 
     ~Model();
 
+    std::shared_ptr<Shader> shader;
+
     std::string name;
 
     unsigned int vao;
@@ -29,9 +33,8 @@ public:
     unsigned int ebo;
     unsigned int elementsCount;
 
-    std::vector<Transform *> transforms;
-
     void load(const std::vector<Vertex> &data, const std::vector<unsigned int> &indices, const std::string &modelName);
 
     void unload();
+
 };

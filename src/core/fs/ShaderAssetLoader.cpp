@@ -2,7 +2,7 @@
 // Created by Magnitola on 17.09.2025.
 //
 
-#include "ShaderLoader.h"
+#include "ShaderAssetLoader.h"
 
 #include <filesystem>
 #include <format>
@@ -11,7 +11,31 @@
 #include <sstream>
 #include <string>
 
-GLuint ShaderLoader::createShaderProgram(const char *name, const char *directory) {
+#include "render/Shader.h"
+
+std::unique_ptr<Asset> ShaderAssetLoader::load(std::string_view path) {
+    std::string path_str(path);
+    const size_t separator_pos = path_str.find('|');
+
+    if (separator_pos == std::string::npos) {
+        std::cerr << std::format("Invalid shader path format: {}\n", path);
+        return nullptr;
+    }
+
+    const std::string shader_name = path_str.substr(0, separator_pos);
+    const std::string directory = path_str.substr(separator_pos + 1);
+    const GLuint program = createShaderProgram(shader_name.c_str(), directory.c_str());
+    if (program == 0) {
+        return nullptr;
+    }
+
+    auto shader = std::make_unique<Shader>();
+    shader->path_ = path;
+    shader->programId_ = program;
+    return shader;
+}
+
+GLuint ShaderAssetLoader::createShaderProgram(const char *name, const char *directory) {
     std::string pathVert = std::format("{}/{}.vert", directory, name);
     std::string pathFrag = std::format("{}/{}.frag", directory, name);
 
@@ -42,7 +66,7 @@ GLuint ShaderLoader::createShaderProgram(const char *name, const char *directory
     return program;
 }
 
-std::string ShaderLoader::readFile(const char *path) {
+std::string ShaderAssetLoader::readFile(const char *path) {
     std::string text;
 
     // Convert local path to absolute
@@ -62,7 +86,7 @@ std::string ShaderLoader::readFile(const char *path) {
     return text;
 }
 
-GLuint ShaderLoader::createShader(const GLenum shaderType, const std::string &source) {
+GLuint ShaderAssetLoader::createShader(const GLenum shaderType, const std::string &source) {
     const GLuint shaderId = glCreateShader(shaderType);
     const std::string shaderSource = readFile(source.c_str());
     const char *pointer = shaderSource.c_str();
