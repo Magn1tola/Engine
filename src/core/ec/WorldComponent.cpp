@@ -8,10 +8,10 @@
 #include "math/Transform.h"
 
 WorldComponent::WorldComponent() {
-    transform = new Transform();
+    transform = std::make_shared<Transform>();
 }
 
-void WorldComponent::setOwner(Entity &newOwner) {
+void WorldComponent::setOwner(Entity *newOwner) {
     EntityComponent::setOwner(newOwner);
-    transform->setParent(*newOwner.transform);
+    transform->attachTo(newOwner->transform);
 }

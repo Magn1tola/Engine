@@ -9,6 +9,5 @@ class QuadMeshComponent : public MeshComponent {
 public:
     QuadMeshComponent();
 
-protected:
-    ~QuadMeshComponent() = default;
+    ~QuadMeshComponent() override = default;
 };

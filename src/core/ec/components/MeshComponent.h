@@ -13,14 +13,10 @@ class MeshComponent : public WorldComponent {
 public:
     MeshComponent();
 
-    Model *model;
-    Transform *transform;
+    ~MeshComponent() override = default;
+
+    std::shared_ptr<Model> model;
 
 protected:
-    ~MeshComponent() = default;
-
     void update(float deltaTime) override;
-
-private:
-    typedef EntityComponent super;
 };

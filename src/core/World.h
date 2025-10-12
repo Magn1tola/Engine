@@ -7,49 +7,27 @@
 #include <ranges>
 #include <vector>
 
-#include "math/Transform.h"
-
-
 class Entity;
 class Transform;
 class Render;
 
-class World {
+class World : public std::enable_shared_from_this<World> {
 public:
-    World();
+    World() = default;
 
-    ~World();
-
-    [[nodiscard]] Render *getRender() const;
+    ~World() = default;
 
     void update(float deltaTime) const;
 
-    template<class T>
-        requires std::derived_from<T, Entity>
-    T *spawnEntity();
-
-    template<class T>
-        requires std::derived_from<T, Entity>
-    T *spawnEntity(Transform *transform);
+    template<class T> requires std::derived_from<T, Entity>
+    std::shared_ptr<T> spawnEntity() {
+        std::shared_ptr<T> entity = std::make_shared<T>();
+        entities_.push_back(entity);
+        entity->world_ = shared_from_this();
+        entity->onSpawned();
+        return entity;
+    }
 
 private:
-    std::unique_ptr<Render> render_;
-
-    std::vector<Entity *> entities_;
-
-    void initEntity(Entity *entity);
+    std::vector<std::shared_ptr<Entity>> entities_;
 };
-
-template<class T> requires std::derived_from<T, Entity>
-T *World::spawnEntity() {
-    T *entity = new T();
-    initEntity(entity);
-    return entity;
-}
-
-template<class T> requires std::derived_from<T, Entity>
-T *World::spawnEntity(Transform *transform) {
-    T *entity = new T();
-    initEntity(entity, transform);
-    return entity;
-}

@@ -4,9 +4,7 @@
 
 #include "CameraComponent.h"
 
-#include "Entity.h"
 #include "math/Matrix4x4.h"
-#include "math/Transform.h"
 
 CameraComponent::CameraComponent() {
     bCanBeUpdated = true;

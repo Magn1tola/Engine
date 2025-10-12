@@ -3,6 +3,8 @@
 //
 
 #pragma once
+#include <memory>
+
 #include "EntityComponent.h"
 
 
@@ -12,9 +14,9 @@ class WorldComponent : public EntityComponent {
 public:
     WorldComponent();
 
-    Transform* transform;
+    ~WorldComponent() override = default;
 
-    void setOwner(Entity &newOwner) override;
-protected:
-    ~WorldComponent() = default;
+    std::shared_ptr<Transform> transform;
+
+    void setOwner(Entity *newOwner) override;
 };

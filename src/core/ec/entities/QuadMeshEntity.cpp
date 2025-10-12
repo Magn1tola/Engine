@@ -4,12 +4,11 @@
 
 #include "QuadMeshEntity.h"
 
-#include "components/QuadMeshComponent.h"
 #include "math/Transform.h"
 
 QuadMeshEntity::QuadMeshEntity() {
     bCanBeUpdated = true;
-    quadMesh = createComponent<QuadMeshComponent>();
+    quadMesh = CREATE_UNIQUE_COMPONENT(QuadMeshComponent);
 }
 
 void QuadMeshEntity::update(float deltaTime) {

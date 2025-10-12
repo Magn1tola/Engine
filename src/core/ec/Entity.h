@@ -3,6 +3,7 @@
 //
 
 #pragma once
+#include <memory>
 #include <vector>
 
 #include "EngineObject.h"
@@ -15,37 +16,39 @@ class Entity : public EngineObject {
 public:
     Entity();
 
-    Transform* transform;
+    ~Entity() override = default;
 
-    World* world;
+    std::shared_ptr<Transform> transform;
+
+    [[nodiscard]] std::shared_ptr<World> getWorld() const { return world_; }
 
     virtual void onSpawned();
 
     void tryUpdate(float deltaTime);
 
 protected:
-    ~Entity() = default;
-
     bool bCanBeUpdated = false;
     bool bComponentsCanUpdate = true;
 
     virtual void update(float deltaTime);
 
-    template<class T>
-        requires std::derived_from<T, EntityComponent>
-    T *createComponent();
+    template<class T> requires std::derived_from<T, EntityComponent>
+    T *createComponent() {
+        T *component = new T();
+        components_.push_back(component);
+        component->setOwner(this);
+        component->onConstructed();
+        return component;
+    }
 
 private:
     bool isAttached_ = false;
-    std::vector<EntityComponent *> _components;
+    std::vector<EntityComponent *> components_;
 
-    void initComponent(EntityComponent *component);
+    std::shared_ptr<World> world_;
+
+    friend class World;
 };
 
-template<class T>
-    requires std::derived_from<T, EntityComponent>
-T *Entity::createComponent() {
-    T *component = new T();
-    initComponent(component);
-    return component;
-}
+#define CREATE_SHARED_COMPONENT(type) std::shared_ptr<type>(createComponent<type>())
+#define CREATE_UNIQUE_COMPONENT(type) std::unique_ptr<type>(createComponent<type>())

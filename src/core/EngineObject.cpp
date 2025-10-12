@@ -3,8 +3,3 @@
 //
 
 #include "./EngineObject.h"
-
-#include "math/Transform.h"
-
-EngineObject::EngineObject() {
-}

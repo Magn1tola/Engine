@@ -4,16 +4,15 @@
 
 #include "CameraEntity.h"
 
-#include "World.h"
 #include "components/CameraComponent.h"
 #include "render/Render.h"
 
 CameraEntity::CameraEntity() {
-    camera = createComponent<CameraComponent>();
+    camera = CREATE_SHARED_COMPONENT(CameraComponent);
 }
 
 void CameraEntity::onSpawned() {
     Entity::onSpawned();
 
-    world->getRender()->setRenderingCamera(*camera);
+    Render::getInstance().setRenderingCamera(camera);
 }

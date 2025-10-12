@@ -3,20 +3,18 @@
 //
 
 #pragma once
-#include "../Entity.h"
+#include "Entity.h"
+#include "components/QuadMeshComponent.h"
 
-
-class MeshComponent;
-class QuadMeshComponent;
 
 class QuadMeshEntity : public Entity {
 public:
     QuadMeshEntity();
 
-    QuadMeshComponent *quadMesh;
+    ~QuadMeshEntity() override = default;
+
+    std::unique_ptr<QuadMeshComponent> quadMesh;
 
 protected:
-    ~QuadMeshEntity() = default;
-
     void update(float deltaTime) override;
 };

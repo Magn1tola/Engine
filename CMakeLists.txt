@@ -36,8 +36,6 @@ add_executable(Engine src/main.cpp
         src/math/Quaternion.h
         src/math/Matrix4x4.cpp
         src/math/Matrix4x4.h
-        src/render/Material.cpp
-        src/render/Material.h
         src/render/Shader.cpp
         src/render/Shader.h
         src/core/ec/components/CameraComponent.cpp

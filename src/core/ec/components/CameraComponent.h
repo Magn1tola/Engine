@@ -34,6 +34,4 @@ public:
 
     [[nodiscard]] Matrix4x4 GetProjectionMatrix() const;
 
-protected:
-    ~CameraComponent() = default;
 };

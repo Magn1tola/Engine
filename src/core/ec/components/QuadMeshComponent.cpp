@@ -12,7 +12,7 @@
 QuadMeshComponent::QuadMeshComponent() {
     bCanBeUpdated = true;
 
-    model = new Model();
+    model = std::make_shared<Model>();
 
     Vector3 verticies[] = {
         {-0.5f, -0.5f, 0.5f},
@@ -51,8 +51,7 @@ QuadMeshComponent::QuadMeshComponent() {
         7, 3, 0
     };
 
-    auto expected = GET_OR_LOAD_ASSET(Shader, "shader|assets/shaders/");
-    if (expected.has_value())
+    if (const auto expected = GET_OR_LOAD_ASSET(Shader, "shader|assets/shaders/"); expected.has_value())
         model->shader = expected.value();
     else
         std::cout << "Failed to load shader" << std::endl;

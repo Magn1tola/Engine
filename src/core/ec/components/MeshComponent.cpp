@@ -4,20 +4,15 @@
 
 #include "MeshComponent.h"
 
-#include "Entity.h"
-#include "World.h"
-#include "math/Transform.h"
 #include "render/Render.h"
 
-MeshComponent::MeshComponent() : model(nullptr) {
+MeshComponent::MeshComponent() {
     bCanBeUpdated = true;
-    transform = nullptr;
 }
 
 void MeshComponent::update(float deltaTime) {
-    super::update(deltaTime);
+    WorldComponent::update(deltaTime);
 
-    const RenderRequest request{*model, *owner->transform};
-    owner->world->getRender()->submitRequest(request);
+    Render::getInstance().submitRequest({model, transform});
 
 }

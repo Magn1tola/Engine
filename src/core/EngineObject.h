@@ -5,9 +5,8 @@
 #pragma once
 
 class EngineObject {
-protected:
-    ~EngineObject() = default;
-
 public:
-    EngineObject();
+    EngineObject() = default;
+
+    virtual ~EngineObject() = default;
 };

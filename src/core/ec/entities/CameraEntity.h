@@ -3,6 +3,8 @@
 //
 
 #pragma once
+#include <memory>
+
 #include "Entity.h"
 
 
@@ -12,7 +14,9 @@ class CameraEntity : public Entity {
 public:
     CameraEntity();
 
-    CameraComponent *camera;
+    ~CameraEntity() override = default;
+
+    std::shared_ptr<CameraComponent> camera;
 
     void onSpawned() override;
 };

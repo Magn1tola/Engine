@@ -8,7 +8,6 @@
 #include "entities/CameraEntity.h"
 #include "entities/QuadMeshEntity.h"
 #include "fs/AssetManager.h"
-#include "fs/AssetLoader.h"
 #include "fs/ShaderAssetLoader.h"
 #include "math/Transform.h"
 #include "math/Vector3.h"
@@ -63,8 +62,8 @@ int main() {
 
     if (!initGlew(window)) return -1;
 
-    auto *world = new World();
-    Render *render = world->getRender();
+    auto world = std::make_shared<World>();
+
     ASSET_MANAGER.registerAssetLoader<Shader>(std::make_unique<ShaderAssetLoader>());
 
     // test level data --->
@@ -79,11 +78,11 @@ int main() {
     entity2->transform->setScale(Vector3(0.5f));
 
     auto entity3 = world->spawnEntity<QuadMeshEntity>();
-    entity3->transform->translate(Vector3(0, 0, -3));
+    entity3->transform->translate(Vector3(0, 0, -2));
     entity3->transform->setScale(Vector3(0.5f));
 
-    entity2->transform->setParent(*entity3->transform);
-    entity3->transform->setParent(*entity->transform);
+    entity2->transform->attachTo(entity->transform);
+    entity3->transform->attachTo(entity2->transform);
     // <---
 
     float lastTime = 0;
@@ -97,7 +96,7 @@ int main() {
             deltaTime = 0;
         world->update(deltaTime);
         lastTime = currentTime;
-        render->rendering();
+        Render::getInstance().rendering();
         glfwPollEvents();
         glfwSwapBuffers(window);
     }

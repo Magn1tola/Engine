@@ -15,14 +15,10 @@
 #include "render/Model.h"
 #include "fs/AssetManager.h"
 
-RenderRequest::RenderRequest(Model &model, Transform &transform) {
-    this->model = &model;
-    this->transform = &transform;
+Render &Render::getInstance() {
+    static Render render;
+    return render;
 }
-
-Render::Render() = default;
-
-Render::~Render() = default;
 
 void Render::submitRequest(const RenderRequest request) {
     requests_.push_back(request);
@@ -49,6 +45,6 @@ void Render::rendering() {
     requests_.clear();
 }
 
-void Render::setRenderingCamera(CameraComponent &camera) {
-    renderCamera_ = &camera;
+void Render::setRenderingCamera(const std::shared_ptr<CameraComponent> &camera) {
+    renderCamera_ = camera;
 }

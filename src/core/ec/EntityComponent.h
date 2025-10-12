@@ -3,7 +3,8 @@
 //
 
 #pragma once
-#include "../EngineObject.h"
+
+#include "EngineObject.h"
 
 class Entity;
 
@@ -11,21 +12,20 @@ class EntityComponent : public EngineObject {
 public:
     EntityComponent();
 
-    Entity *owner;
+    ~EntityComponent() override = default;
+
+    [[nodiscard]] Entity *getOwner() const { return owner_; }
 
     virtual void onConstructed();
 
     void tryUpdate(float deltaTime);
 
-    virtual void setOwner(Entity &newOwner);
-
-protected:
-    ~EntityComponent();
+    virtual void setOwner(Entity *newOwner);
 
     bool bCanBeUpdated = false;
 
     virtual void update(float deltaTime);
 
 private:
-    typedef EngineObject super;
+    Entity *owner_;
 };

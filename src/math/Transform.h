@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <memory>
+
 #include "Matrix4x4.h"
 #include "Quaternion.h"
 #include "Vector3.h"
@@ -12,16 +14,18 @@ class Transform {
 public:
     Transform();
 
+    ~Transform();
+
     [[nodiscard]] const Vector3 *getPosition() const {
-        return &position;
+        return &position_;
     }
 
     [[nodiscard]] const Quaternion *getRotation() const {
-        return &rotation;
+        return &rotation_;
     }
 
     [[nodiscard]] const Vector3 *getScale() const {
-        return &scale;
+        return &scale_;
     }
 
     Vector3 getWorldPosition();
@@ -30,7 +34,7 @@ public:
 
     Vector3 getWorldScale();
 
-    void setParent(Transform &newParent);
+    void attachTo(const std::shared_ptr<Transform> &newParent);
 
     void setPosition(const Vector3 &newPosition);
 
@@ -50,20 +54,18 @@ public:
 
     [[nodiscard]] Matrix4x4 getTransformMatrix();
 
-protected:
-    ~Transform();
-
 private:
-    Vector3 position;
-    Quaternion rotation;
-    Vector3 scale;
+    Vector3 position_;
+    Quaternion rotation_;
+    Vector3 scale_;
 
-    Matrix4x4 worldMatrix;
+    Matrix4x4 worldMatrix_;
 
-    Transform *parent;
+    std::weak_ptr<Transform> parent_;
 
     bool isDirty = false;
 
     void updateWorldMatrix();
+
     void tryUpdateWorldMatrix();
 };
