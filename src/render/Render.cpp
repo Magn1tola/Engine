@@ -13,7 +13,7 @@
 #include "math/Matrix4x4.h"
 #include "math/Transform.h"
 #include "render/Model.h"
-#include "fs/AssetManager.h"
+#include "assetManager/AssetManager.h"
 
 Render &Render::getInstance() {
     static Render render;

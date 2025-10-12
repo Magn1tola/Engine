@@ -7,7 +7,7 @@
 #include <iostream>
 #include <render/Model.h>
 
-#include "fs/AssetManager.h"
+#include "assetManager/AssetManager.h"
 
 QuadMeshComponent::QuadMeshComponent() {
     bCanBeUpdated = true;

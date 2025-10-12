@@ -5,15 +5,16 @@ set(CMAKE_CXX_STANDARD 26)
 
 include_directories(
         ${CMAKE_SOURCE_DIR}/src
+        ${CMAKE_SOURCE_DIR}/src/assetManager
         ${CMAKE_SOURCE_DIR}/src/core
-        ${CMAKE_SOURCE_DIR}/src/core/ec
+        ${CMAKE_SOURCE_DIR}/src/core/entityComponent
 )
 
 add_executable(Engine src/main.cpp
-        src/core/ec/Entity.cpp
-        src/core/ec/Entity.h
-        src/core/ec/EntityComponent.cpp
-        src/core/ec/EntityComponent.h
+        src/core/entityComponent/Entity.cpp
+        src/core/entityComponent/Entity.h
+        src/core/entityComponent/EntityComponent.cpp
+        src/core/entityComponent/EntityComponent.h
         src/core/EngineObject.cpp
         src/core/EngineObject.h
         src/math/Vector3.cpp
@@ -26,32 +27,32 @@ add_executable(Engine src/main.cpp
         src/render/Render.h
         src/render/Model.cpp
         src/render/Model.h
-        src/core/ec/components/MeshComponent.cpp
-        src/core/ec/components/MeshComponent.h
-        src/core/ec/components/QuadMeshComponent.cpp
-        src/core/ec/components/QuadMeshComponent.h
-        src/core/ec/entities/QuadMeshEntity.cpp
-        src/core/ec/entities/QuadMeshEntity.h
+        src/core/entityComponent/components/MeshComponent.cpp
+        src/core/entityComponent/components/MeshComponent.h
+        src/core/entityComponent/components/QuadMeshComponent.cpp
+        src/core/entityComponent/components/QuadMeshComponent.h
+        src/core/entityComponent/entities/QuadMeshEntity.cpp
+        src/core/entityComponent/entities/QuadMeshEntity.h
         src/math/Quaternion.cpp
         src/math/Quaternion.h
         src/math/Matrix4x4.cpp
         src/math/Matrix4x4.h
         src/render/Shader.cpp
         src/render/Shader.h
-        src/core/ec/components/CameraComponent.cpp
-        src/core/ec/components/CameraComponent.h
-        src/core/ec/entities/CameraEntity.cpp
-        src/core/ec/entities/CameraEntity.h
-        src/core/ec/WorldComponent.cpp
-        src/core/ec/WorldComponent.h
-        src/core/fs/AssetManager.cpp
-        src/core/fs/AssetManager.h
-        src/core/fs/Asset.cpp
-        src/core/fs/Asset.h
-        src/core/fs/AssetLoader.cpp
-        src/core/fs/AssetLoader.h
-        src/core/fs/ShaderAssetLoader.cpp
-        src/core/fs/ShaderAssetLoader.h
+        src/core/entityComponent/components/CameraComponent.cpp
+        src/core/entityComponent/components/CameraComponent.h
+        src/core/entityComponent/entities/CameraEntity.cpp
+        src/core/entityComponent/entities/CameraEntity.h
+        src/core/entityComponent/WorldComponent.cpp
+        src/core/entityComponent/WorldComponent.h
+        src/assetManager/AssetManager.cpp
+        src/assetManager/AssetManager.h
+        src/assetManager/Asset.cpp
+        src/assetManager/Asset.h
+        src/assetManager/AssetLoader.cpp
+        src/assetManager/AssetLoader.h
+        src/assetManager/ShaderAssetLoader.cpp
+        src/assetManager/ShaderAssetLoader.h
 )
 
 find_package(OpenGL REQUIRED)
