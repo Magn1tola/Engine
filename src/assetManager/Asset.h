@@ -11,7 +11,8 @@
 class Asset : public EngineObject {
 public:
     Asset() = default;
-    virtual ~Asset() = default;
+
+    ~Asset() override = default;
 
     [[nodiscard]] std::string_view getPath() const noexcept { return path_; }
     [[nodiscard]] bool isLoaded() const noexcept { return loaded_; }

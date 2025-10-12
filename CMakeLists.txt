@@ -51,8 +51,12 @@ add_executable(Engine src/main.cpp
         src/assetManager/Asset.h
         src/assetManager/AssetLoader.cpp
         src/assetManager/AssetLoader.h
-        src/assetManager/ShaderAssetLoader.cpp
-        src/assetManager/ShaderAssetLoader.h
+        src/assetManager/loaders/ShaderAssetLoader.cpp
+        src/assetManager/loaders/ShaderAssetLoader.h
+        src/assetManager/loaders/ModelAssetLoader.cpp
+        src/assetManager/loaders/ModelAssetLoader.h
+        src/math/Vector2.cpp
+        src/math/Vector2.h
 )
 
 find_package(OpenGL REQUIRED)

@@ -8,7 +8,8 @@
 #include "entities/CameraEntity.h"
 #include "entities/QuadMeshEntity.h"
 #include "AssetManager.h"
-#include "ShaderAssetLoader.h"
+#include "loaders/ModelAssetLoader.h"
+#include "loaders/ShaderAssetLoader.h"
 #include "math/Transform.h"
 #include "math/Vector3.h"
 #include "render/Render.h"
@@ -65,6 +66,7 @@ int main() {
     auto world = std::make_shared<World>();
 
     ASSET_MANAGER.registerAssetLoader<Shader>(std::make_unique<ShaderAssetLoader>());
+    ASSET_MANAGER.registerAssetLoader<Model>(std::make_unique<ModelAssetLoader>());
 
     // test level data --->
     auto camera = world->spawnEntity<CameraEntity>();
@@ -73,12 +75,12 @@ int main() {
     auto entity = world->spawnEntity<QuadMeshEntity>();
 
     auto entity2 = world->spawnEntity<QuadMeshEntity>();
-    entity2->transform->translate(Vector3(0, 0, -2));
+    entity2->transform->translate(Vector3(0, 0, -3));
     entity2->transform->rotate(Vector3(35, 0, 20));
     entity2->transform->setScale(Vector3(0.5f));
 
     auto entity3 = world->spawnEntity<QuadMeshEntity>();
-    entity3->transform->translate(Vector3(0, 0, -2));
+    entity3->transform->translate(Vector3(0, 0, -3));
     entity3->transform->setScale(Vector3(0.5f));
 
     entity2->transform->attachTo(entity->transform);

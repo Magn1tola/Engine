@@ -10,11 +10,10 @@ Model::Model() : vao(0), vbo(0), ebo(0), elementsCount(0) {
 }
 
 Model::~Model() {
-    unload();
+    Model::unload_impl();
 }
 
-void Model::load(const std::vector<Vertex> &data, const std::vector<unsigned int> &indices, const std::string &modelName) {
-    name = modelName;
+bool Model::load_impl() {
     if (vao == 0)
         glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
@@ -24,7 +23,7 @@ void Model::load(const std::vector<Vertex> &data, const std::vector<unsigned int
     if (vbo == 0)
         glGenBuffers(1, &vbo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, data.size() * vertexSize, data.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, vertices_.size() * vertexSize, vertices_.data(), GL_STATIC_DRAW);
 
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, vertexSize, static_cast<void *>(nullptr));
     glEnableVertexAttribArray(0);
@@ -35,15 +34,17 @@ void Model::load(const std::vector<Vertex> &data, const std::vector<unsigned int
     glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, vertexSize, reinterpret_cast<void *>(offsetof(Vertex, texCoords)));
     glEnableVertexAttribArray(2);
 
-    elementsCount = indices.size();
+    elementsCount = indices_.size();
 
     if (ebo == 0)
         glGenBuffers(1, &ebo);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, elementsCount * sizeof(unsigned int), indices.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, elementsCount * sizeof(unsigned int), indices_.data(), GL_STATIC_DRAW);
+
+    return true;
 }
 
-void Model::unload() {
+void Model::unload_impl() {
     glDeleteBuffers(1, &vbo);
     glDeleteBuffers(1, &ebo);
     glDeleteVertexArrays(1, &vao);

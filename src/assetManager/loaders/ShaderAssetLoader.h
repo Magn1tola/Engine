@@ -7,12 +7,11 @@
 #include <string>
 #include <GL/glew.h>
 
-#include "AssetLoader.h"
+#include "../AssetLoader.h"
 
 
 class ShaderAssetLoader : public AssetLoader {
 public:
-
     std::unique_ptr<Asset> load(std::string_view path) override;
 
 private:

@@ -8,21 +8,22 @@
 #include <vector>
 
 #include "Shader.h"
-#include "../math/Vector3.h"
+#include "math/Vector2.h"
+#include "math/Vector3.h"
 
 class Transform;
 
 struct Vertex {
     Vector3 position;
     Vector3 normal;
-    Vector3 texCoords;
+    Vector2 texCoords;
 };
 
-class Model {
+class Model : public Asset {
 public:
     Model();
 
-    ~Model();
+    ~Model() override;
 
     std::shared_ptr<Shader> shader;
 
@@ -33,8 +34,14 @@ public:
     unsigned int ebo;
     unsigned int elementsCount;
 
-    void load(const std::vector<Vertex> &data, const std::vector<unsigned int> &indices, const std::string &modelName);
+protected:
+    bool load_impl() override;
 
-    void unload();
+    void unload_impl() override;
 
+private:
+    std::vector<Vertex> vertices_;
+    std::vector<unsigned int> indices_;
+
+    friend class ModelAssetLoader;
 };
