@@ -57,6 +57,7 @@ add_executable(Engine src/main.cpp
         src/assetManager/loaders/ModelAssetLoader.h
         src/math/Vector2.cpp
         src/math/Vector2.h
+        src/utils/Singleton.h
 )
 
 find_package(OpenGL REQUIRED)

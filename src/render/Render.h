@@ -6,6 +6,8 @@
 #include <memory>
 #include <vector>
 
+#include "utils/Singleton.h"
+
 
 class CameraComponent;
 class Model;
@@ -15,21 +17,13 @@ struct RenderRequest {
     const std::shared_ptr<Model> &model;
     const std::shared_ptr<Transform> &transform;
 
-    RenderRequest(const std::shared_ptr<Model> &model, const std::shared_ptr<Transform> &transform) : model(model), transform(transform) {};
+    RenderRequest(const std::shared_ptr<Model> &model, const std::shared_ptr<Transform> &transform)
+        : model(model), transform(transform) {
+    };
 };
 
-class Render {
+class Render : public Singleton<Render> {
 public:
-    Render(const Render &) = delete;
-
-    Render &operator=(const Render &) = delete;
-
-    Render(Render &&) = delete;
-
-    Render &operator=(Render &&) = delete;
-
-    static Render &getInstance();
-
     void submitRequest(RenderRequest request);
 
     void rendering();
@@ -37,10 +31,6 @@ public:
     void setRenderingCamera(const std::shared_ptr<CameraComponent> &camera);
 
 private:
-    Render() = default;
-
-    ~Render() = default;
-
     std::shared_ptr<CameraComponent> renderCamera_;
     std::vector<RenderRequest> requests_;
 };

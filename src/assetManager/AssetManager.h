@@ -12,6 +12,7 @@
 
 #include "Asset.h"
 #include "AssetLoader.h"
+#include "utils/Singleton.h"
 
 
 class AssetLoader;
@@ -24,20 +25,10 @@ enum class AssetManagerError {
     AssetNotFound,
 };
 
-class AssetManager {
+class AssetManager : public Singleton<AssetManager> {
 public:
     template<std::derived_from<Asset> T>
     using AssetPtr = std::shared_ptr<T>;
-
-    AssetManager(const AssetManager &) = delete;
-
-    AssetManager &operator=(const AssetManager &) = delete;
-
-    AssetManager(AssetManager &&) = delete;
-
-    AssetManager &operator=(AssetManager &&) = delete;
-
-    static AssetManager &getInstance();
 
     template<class T> requires std::derived_from<T, Asset>
     void registerAssetLoader(std::unique_ptr<AssetLoader> loader) {
@@ -88,10 +79,6 @@ public:
     }
 
 private:
-    AssetManager() = default;
-
-    ~AssetManager() = default;
-
     std::unordered_map<std::string, std::shared_ptr<Asset> > assets_;
     std::unordered_map<size_t, std::unique_ptr<AssetLoader> > loaders_;
 };

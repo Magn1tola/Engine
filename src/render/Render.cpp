@@ -15,11 +15,6 @@
 #include "render/Model.h"
 #include "assetManager/AssetManager.h"
 
-Render &Render::getInstance() {
-    static Render render;
-    return render;
-}
-
 void Render::submitRequest(const RenderRequest request) {
     requests_.push_back(request);
 }
