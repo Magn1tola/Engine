@@ -68,7 +68,7 @@ int main() {
     ASSET_MANAGER.registerAssetLoader<Shader>(std::make_unique<ShaderAssetLoader>());
     ASSET_MANAGER.registerAssetLoader<Model>(std::make_unique<ModelAssetLoader>());
 
-    // test level data --->
+    // test level data
     auto camera = world->spawnEntity<CameraEntity>();
     camera->transform->translate(Vector3(0, 0, -8));
 
@@ -85,11 +85,20 @@ int main() {
 
     entity2->transform->attachTo(entity->transform);
     entity3->transform->attachTo(entity2->transform);
-    // <---
+    // Reflection testing
+    const auto& classInfo = QuadMeshEntity::getClassInfo();
+    for (const auto& field : classInfo.getAllBaseClasses()) {
+        std::cout << field->getClassName() << std::endl;
+    }
+    for (const auto& [name, info] : classInfo.getAllFields()) {
+        std::any value = info.getValue(entity.get());
+        std::cout << info.getName() << " = " << std::any_cast<int>(value) << std::endl;
+    }
 
     float lastTime = 0;
     float currentTime = 0;
     float deltaTime = 0.0f;
+
 
     while (!glfwWindowShouldClose(window)) {
         currentTime = glfwGetTime();

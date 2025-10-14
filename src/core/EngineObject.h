@@ -3,10 +3,15 @@
 //
 
 #pragma once
+#include "../reflection/Reflected.h"
 
-class EngineObject {
+class EngineObject : public Reflected<EngineObject> {
+    DECLARE_REFLECTED(EngineObject);
+
 public:
     EngineObject() = default;
 
     virtual ~EngineObject() = default;
+
+    FIELD_INIT(int, test, 10);
 };

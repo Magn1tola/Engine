@@ -12,7 +12,10 @@ class Transform;
 class World;
 class EntityComponent;
 
-class Entity : public EngineObject {
+class Entity : public EngineObject, public Reflected<Entity> {
+    DECLARE_REFLECTED(Entity);
+    REFLECTED_BASE(EngineObject);
+
 public:
     Entity();
 
@@ -25,6 +28,8 @@ public:
     virtual void onSpawned();
 
     void tryUpdate(float deltaTime);
+
+    FIELD_INIT(int, aaa, 20);
 
 protected:
     bool bCanBeUpdated = false;

@@ -5,14 +5,11 @@
 #pragma once
 #include <string>
 
-#include "EngineObject.h"
-
-
-class Asset : public EngineObject {
+class Asset {
 public:
     Asset() = default;
 
-    ~Asset() override = default;
+    virtual ~Asset() = default;
 
     [[nodiscard]] std::string_view getPath() const noexcept { return path_; }
     [[nodiscard]] bool isLoaded() const noexcept { return loaded_; }
