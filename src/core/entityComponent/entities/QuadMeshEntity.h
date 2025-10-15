@@ -7,7 +7,7 @@
 #include "components/QuadMeshComponent.h"
 
 
-class QuadMeshEntity : public Entity, public Reflected<QuadMeshEntity> {
+class QuadMeshEntity : public Entity {
     DECLARE_REFLECTED(QuadMeshEntity);
     REFLECTED_BASE(Entity);
 
@@ -17,8 +17,6 @@ public:
     ~QuadMeshEntity() override = default;
 
     std::unique_ptr<QuadMeshComponent> quadMesh;
-
-    FIELD_INIT(int, bbb, 12314);
 
 protected:
     void update(float deltaTime) override;

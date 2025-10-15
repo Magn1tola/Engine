@@ -3,9 +3,9 @@
 //
 
 #pragma once
-#include "../reflection/Reflected.h"
+#include <reflection/Reflector.h>
 
-class EngineObject : public Reflected<EngineObject> {
+class EngineObject {
     DECLARE_REFLECTED(EngineObject);
 
 public:
@@ -13,5 +13,4 @@ public:
 
     virtual ~EngineObject() = default;
 
-    FIELD_INIT(int, test, 10);
 };

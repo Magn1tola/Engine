@@ -58,12 +58,16 @@ add_executable(Engine src/main.cpp
         src/math/Vector2.cpp
         src/math/Vector2.h
         src/utils/Singleton.h
-        src/reflection/Reflected.cpp
-        src/reflection/Reflected.h
+        src/reflection/Reflector.cpp
+        src/reflection/Reflector.h
         src/reflection/ClassInfo.cpp
         src/reflection/ClassInfo.h
         src/reflection/FieldInfo.cpp
         src/reflection/FieldInfo.h
+        src/reflection/ConstructorInfo.cpp
+        src/reflection/ConstructorInfo.h
+        src/reflection/MethodInfo.cpp
+        src/reflection/MethodInfo.h
 )
 
 find_package(OpenGL REQUIRED)

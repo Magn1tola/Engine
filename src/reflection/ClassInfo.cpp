@@ -9,7 +9,15 @@ void ClassInfo::addField(const FieldInfo &field) {
 }
 
 void ClassInfo::addBaseClass(const ClassInfo *baseClass) {
-    baseClasses_.push_back(baseClass);
+    baseClasses_.emplace_back(baseClass);
+}
+
+void ClassInfo::addMethod(const MethodInfo &method) {
+    methodMap_.emplace(method.getName(), method);
+}
+
+void ClassInfo::addConstructor(const ConstructorInfo &constructor) {
+    constructors_.emplace_back(constructor);
 }
 
 ClassInfo::FieldMap ClassInfo::getAllFields() const {
@@ -24,6 +32,29 @@ ClassInfo::BaseClasses ClassInfo::getAllBaseClasses() const {
     return allBaseClasses;
 }
 
+ClassInfo::MethodMap ClassInfo::getAllMethods() const {
+    MethodMap allMethods;
+    collectMethodsRecursive(allMethods);
+    return allMethods;
+}
+
+void *ClassInfo::construct() {
+    constexpr std::vector<std::any> args;
+    return findConstructor(args)->construct(args);
+}
+
+void *ClassInfo::construct(const std::vector<std::any> &args) {
+    return findConstructor(args)->construct(args);
+}
+
+const FieldInfo &ClassInfo::getField(const std::string &fieldName) const {
+    return fields_.find(fieldName)->second;
+}
+
+const MethodInfo &ClassInfo::getMethod(const std::string &methodName) const {
+    return methodMap_.find(methodName)->second;
+}
+
 void ClassInfo::collectFieldsRecursive(FieldMap &allFields) const {
     for (const auto &baseClass: baseClasses_) {
         baseClass->collectFieldsRecursive(allFields);
@@ -36,4 +67,24 @@ void ClassInfo::collectBaseClassesRecursive(BaseClasses &allBaseClasses) const {
         baseClass->collectBaseClassesRecursive(allBaseClasses);
     }
     allBaseClasses.insert(allBaseClasses.begin(), baseClasses_.begin(), baseClasses_.end());
+}
+
+void ClassInfo::collectMethodsRecursive(MethodMap &allMethods) const {
+    for (const auto &baseClass: baseClasses_) {
+        baseClass->collectMethodsRecursive(allMethods);
+    }
+    allMethods.insert(methodMap_.begin(), methodMap_.end());
+}
+
+ConstructorInfo *ClassInfo::findConstructor(const std::vector<std::any> &args) {
+    std::vector<std::string> argsTypes;
+    for ([[maybe_unused]] auto arg : args) {
+        argsTypes.push_back(typeid(arg).name());
+    }
+
+    for (int i = 0; i < constructors_.size(); i++) {
+        if (constructors_[i].getParamTypes() == argsTypes)
+            return &constructors_[i];
+    }
+    return nullptr;
 }
