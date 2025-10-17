@@ -4,13 +4,16 @@
 
 #include "FieldInfo.h"
 
-FieldInfo::FieldInfo(const std::function<std::any(void *)> &getter,
+#include <utility>
+
+FieldInfo::FieldInfo(const std::function<const void*(const void *)> &getter,
                      const std::function<void(void *, std::any)> &setter,
-                     const std::string &name,
-                     const std::string &type) : getter_(getter), setter_(setter), name_(name), typeName_(type) {
+                     std::string name,
+                     const std::type_index typeIndex)
+    : getter_(getter), setter_(setter), name_(std::move(name)), typeId_(typeIndex) {
 }
 
-std::any FieldInfo::getValue(void *object) const {
+const void *FieldInfo::getValue(const void *object) const {
     return getter_(object);
 }
 
@@ -22,6 +25,6 @@ const std::string &FieldInfo::getName() const {
     return name_;
 }
 
-const std::string &FieldInfo::getType() const {
-    return typeName_;
+const std::type_index &FieldInfo::getTypeIndex() const {
+    return typeId_;
 }

@@ -6,11 +6,12 @@
 #include <reflection/Reflector.h>
 
 class EngineObject {
-    DECLARE_REFLECTED(EngineObject);
-
 public:
     EngineObject() = default;
 
     virtual ~EngineObject() = default;
 
+    BEGIN_REFLECTED_TYPE(EngineObject)
+        CONSTRUCTOR()
+    END_REFLECTED_TYPE();
 };

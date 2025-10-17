@@ -8,9 +8,6 @@
 
 
 class QuadMeshEntity : public Entity {
-    DECLARE_REFLECTED(QuadMeshEntity);
-    REFLECTED_BASE(Entity);
-
 public:
     QuadMeshEntity();
 
@@ -20,4 +17,9 @@ public:
 
 protected:
     void update(float deltaTime) override;
+
+    BEGIN_REFLECTED_TYPE(QuadMeshEntity)
+        BASE_TYPE(Entity)
+        CONSTRUCTOR()
+    END_REFLECTED_TYPE();
 };

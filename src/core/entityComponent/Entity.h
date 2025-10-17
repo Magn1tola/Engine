@@ -13,9 +13,6 @@ class World;
 class EntityComponent;
 
 class Entity : public EngineObject {
-    DECLARE_REFLECTED(Entity);
-    REFLECTED_BASE(EngineObject);
-
 public:
     Entity();
 
@@ -51,6 +48,12 @@ private:
     std::shared_ptr<World> world_;
 
     friend class World;
+
+    BEGIN_REFLECTED_TYPE(Entity)
+        BASE_TYPE(EngineObject)
+        CONSTRUCTOR()
+        FIELDS(transform, bCanBeUpdated, bComponentsCanUpdate)
+    END_REFLECTED_TYPE();
 };
 
 #define CREATE_SHARED_COMPONENT(type) std::shared_ptr<type>(createComponent<type>())

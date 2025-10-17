@@ -60,14 +60,17 @@ add_executable(Engine src/main.cpp
         src/utils/Singleton.h
         src/reflection/Reflector.cpp
         src/reflection/Reflector.h
-        src/reflection/ClassInfo.cpp
-        src/reflection/ClassInfo.h
+        src/reflection/TypeInfo.cpp
+        src/reflection/TypeInfo.h
         src/reflection/FieldInfo.cpp
         src/reflection/FieldInfo.h
         src/reflection/ConstructorInfo.cpp
         src/reflection/ConstructorInfo.h
         src/reflection/MethodInfo.cpp
         src/reflection/MethodInfo.h
+        src/utils/ForEachMacros.h
+        src/serialization/Serializer.cpp
+        src/serialization/Serializer.h
 )
 
 find_package(OpenGL REQUIRED)
@@ -92,7 +95,7 @@ elseif (UNIX AND NOT APPLE)
             pthread
             X11
     )
-endif()
+endif ()
 
 target_include_directories(Engine PRIVATE
         ${GLEW_INCLUDE_DIRS}

@@ -8,12 +8,14 @@
 #include "entities/CameraEntity.h"
 #include "entities/QuadMeshEntity.h"
 #include "AssetManager.h"
+#include "components/CameraComponent.h"
 #include "loaders/ModelAssetLoader.h"
 #include "loaders/ShaderAssetLoader.h"
 #include "math/Transform.h"
 #include "math/Vector3.h"
 #include "render/Render.h"
 #include "render/Shader.h"
+#include "serialization/Serializer.h"
 
 
 GLFWwindow *initGlfw() {
@@ -89,7 +91,6 @@ int main() {
     float lastTime = 0;
     float currentTime = 0;
     float deltaTime = 0.0f;
-
 
     while (!glfwWindowShouldClose(window)) {
         currentTime = glfwGetTime();

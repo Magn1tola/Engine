@@ -24,14 +24,19 @@ public:
 
     /**
      * For orthographic projection only
-     **/
+     */
     float size = 20.0f;
 
     /**
      * For perspective projection only
-     **/
+     */
     float fov = 60.0f;
 
     [[nodiscard]] Matrix4x4 GetProjectionMatrix() const;
 
+    BEGIN_REFLECTED_TYPE(CameraComponent)
+        BASE_TYPE(WorldComponent)
+        CONSTRUCTOR()
+        FIELDS(projectionType, nearPlane, farPlane, aspectRatio, size, fov)
+    END_REFLECTED_TYPE();
 };

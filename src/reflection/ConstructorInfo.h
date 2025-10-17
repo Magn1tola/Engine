@@ -17,9 +17,9 @@ public:
                     ConstructorFunc constructor
     );
 
-    void *construct(const std::vector<std::any> &args) const;
+    [[nodiscard]] void *construct(const std::vector<std::any> &args) const;
 
-    const std::vector<std::string> &getParamTypes() const;
+    [[nodiscard]] const std::vector<std::string> &getParamTypes() const;
 
 private:
     std::vector<std::string> paramTypes_;

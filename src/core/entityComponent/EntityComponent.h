@@ -28,4 +28,11 @@ public:
 
 private:
     Entity *owner_;
+
+    BEGIN_REFLECTED_TYPE(EntityComponent)
+        BASE_TYPE(EngineObject)
+        CONSTRUCTOR()
+        FIELD(bCanBeUpdated)
+        FIELD(owner_)
+    END_REFLECTED_TYPE();
 };
