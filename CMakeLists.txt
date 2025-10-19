@@ -28,7 +28,11 @@ function(get_module_sources module_name output_var)
     set(${output_var} ${MODULE_SRCS} PARENT_SCOPE)
 endfunction()
 
-set(ALL_SRCS src/main.cpp)
+set(ALL_SRCS
+        src/main.cpp
+        src/Application.cpp
+        src/Application.h)
+
 foreach (module IN LISTS ENGINE_MODULES)
     get_module_sources(${module} MODULE_SRCS)
     list(APPEND ALL_SRCS ${MODULE_SRCS})
