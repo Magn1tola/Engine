@@ -10,77 +10,31 @@ include_directories(
         ${CMAKE_SOURCE_DIR}/src/core/entityComponent
 )
 
-add_executable(Engine src/main.cpp
-        src/core/entityComponent/Entity.cpp
-        src/core/entityComponent/Entity.h
-        src/core/entityComponent/EntityComponent.cpp
-        src/core/entityComponent/EntityComponent.h
-        src/core/EngineObject.cpp
-        src/core/EngineObject.h
-        src/math/Vector3.cpp
-        src/math/Vector3.h
-        src/math/Transform.cpp
-        src/math/Transform.h
-        src/core/World.cpp
-        src/core/World.h
-        src/render/Render.cpp
-        src/render/Render.h
-        src/render/Model.cpp
-        src/render/Model.h
-        src/core/entityComponent/components/MeshComponent.cpp
-        src/core/entityComponent/components/MeshComponent.h
-        src/core/entityComponent/components/QuadMeshComponent.cpp
-        src/core/entityComponent/components/QuadMeshComponent.h
-        src/core/entityComponent/entities/QuadMeshEntity.cpp
-        src/core/entityComponent/entities/QuadMeshEntity.h
-        src/math/Quaternion.cpp
-        src/math/Quaternion.h
-        src/math/Matrix4x4.cpp
-        src/math/Matrix4x4.h
-        src/render/Shader.cpp
-        src/render/Shader.h
-        src/core/entityComponent/components/CameraComponent.cpp
-        src/core/entityComponent/components/CameraComponent.h
-        src/core/entityComponent/entities/CameraEntity.cpp
-        src/core/entityComponent/entities/CameraEntity.h
-        src/core/entityComponent/WorldComponent.cpp
-        src/core/entityComponent/WorldComponent.h
-        src/assetManager/AssetManager.cpp
-        src/assetManager/AssetManager.h
-        src/assetManager/Asset.cpp
-        src/assetManager/Asset.h
-        src/assetManager/AssetLoader.cpp
-        src/assetManager/AssetLoader.h
-        src/assetManager/loaders/ShaderAssetLoader.cpp
-        src/assetManager/loaders/ShaderAssetLoader.h
-        src/assetManager/loaders/ModelAssetLoader.cpp
-        src/assetManager/loaders/ModelAssetLoader.h
-        src/math/Vector2.cpp
-        src/math/Vector2.h
-        src/utils/Singleton.h
-        src/reflection/Reflector.cpp
-        src/reflection/Reflector.h
-        src/reflection/TypeInfo.cpp
-        src/reflection/TypeInfo.h
-        src/reflection/FieldInfo.cpp
-        src/reflection/FieldInfo.h
-        src/reflection/ConstructorInfo.cpp
-        src/reflection/ConstructorInfo.h
-        src/reflection/MethodInfo.cpp
-        src/reflection/MethodInfo.h
-        src/utils/ForEachMacros.h
-        #        src/serialization/Serializer.cpp
-        #        src/serialization/Serializer.h
-        #        src/serialization/Deserializer.cpp
-        #        src/serialization/Deserializer.h
-        src/log/Log.cpp
-        src/log/Log.h
-        src/log/Logger.h
-        src/log/loggers/ConsoleLogger.cpp
-        src/log/loggers/ConsoleLogger.h
-        src/log/loggers/FileLogger.cpp
-        src/log/loggers/FileLogger.h
+set(ENGINE_MODULES
+        core
+        math
+        render
+        assetManager
+        reflection
+        log
+        utils
 )
+
+function(get_module_sources module_name output_var)
+    file(GLOB_RECURSE MODULE_SRCS
+            "src/${module_name}/*.cpp"
+            "src/${module_name}/*.h"
+    )
+    set(${output_var} ${MODULE_SRCS} PARENT_SCOPE)
+endfunction()
+
+set(ALL_SRCS src/main.cpp)
+foreach (module IN LISTS ENGINE_MODULES)
+    get_module_sources(${module} MODULE_SRCS)
+    list(APPEND ALL_SRCS ${MODULE_SRCS})
+endforeach ()
+
+add_executable(Engine ${ALL_SRCS})
 
 find_package(OpenGL REQUIRED)
 find_package(glfw3 REQUIRED)
