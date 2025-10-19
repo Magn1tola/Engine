@@ -69,8 +69,17 @@ add_executable(Engine src/main.cpp
         src/reflection/MethodInfo.cpp
         src/reflection/MethodInfo.h
         src/utils/ForEachMacros.h
-        src/serialization/Serializer.cpp
-        src/serialization/Serializer.h
+        #        src/serialization/Serializer.cpp
+        #        src/serialization/Serializer.h
+        #        src/serialization/Deserializer.cpp
+        #        src/serialization/Deserializer.h
+        src/log/Log.cpp
+        src/log/Log.h
+        src/log/Logger.h
+        src/log/loggers/ConsoleLogger.cpp
+        src/log/loggers/ConsoleLogger.h
+        src/log/loggers/FileLogger.cpp
+        src/log/loggers/FileLogger.h
 )
 
 find_package(OpenGL REQUIRED)

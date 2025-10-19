@@ -33,6 +33,5 @@ private:
         BASE_TYPE(EngineObject)
         CONSTRUCTOR()
         FIELD(bCanBeUpdated)
-        FIELD(owner_)
     END_REFLECTED_TYPE();
 };

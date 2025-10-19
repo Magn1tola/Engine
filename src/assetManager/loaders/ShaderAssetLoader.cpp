@@ -11,6 +11,7 @@
 #include <sstream>
 #include <string>
 
+#include "log/Log.h"
 #include "render/Shader.h"
 
 std::unique_ptr<Asset> ShaderAssetLoader::load(std::string_view path) {
@@ -18,7 +19,7 @@ std::unique_ptr<Asset> ShaderAssetLoader::load(std::string_view path) {
     const size_t separator_pos = path_str.find('|');
 
     if (separator_pos == std::string::npos) {
-        std::cerr << std::format("Invalid shader path format: {}\n", path);
+        LOGE("Invalid shader path format: {}", path);
         return nullptr;
     }
 
@@ -56,7 +57,7 @@ GLuint ShaderAssetLoader::createShaderProgram(const char *name, const char *dire
     if (infoLogLength > 0) {
         char *errorMessage = new char[infoLogLength + 1];
         glGetProgramInfoLog(program, infoLogLength, nullptr, errorMessage);
-        std::cout << errorMessage;
+        LOGE("{}", errorMessage);
         delete[] errorMessage;
     }
 
@@ -79,9 +80,7 @@ std::string ShaderAssetLoader::readFile(const char *path) {
         file.close();
     }
 
-    if (text.empty()) {
-        std::cout << "Failed to read file " << path << std::endl;
-    }
+    LOGE_IF(text.empty(), "Failed to read file {}", path);
 
     return text;
 }
@@ -103,7 +102,7 @@ GLuint ShaderAssetLoader::createShader(const GLenum shaderType, const std::strin
     if (infoLogLength > 0) {
         char *errorMessage = new char[infoLogLength + 1];
         glGetShaderInfoLog(shaderId, infoLogLength, nullptr, errorMessage);
-        std::cout << errorMessage;
+        LOGE("{}", errorMessage);
         delete[] errorMessage;
     }
 

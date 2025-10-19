@@ -4,12 +4,10 @@
 
 #pragma once
 #include <memory>
-#include <ranges>
 #include <vector>
 
 class Entity;
 class Transform;
-class Render;
 
 class World : public std::enable_shared_from_this<World> {
 public:

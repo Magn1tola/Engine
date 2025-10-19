@@ -4,18 +4,19 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+#include "AssetManager.h"
 #include "World.h"
 #include "entities/CameraEntity.h"
 #include "entities/QuadMeshEntity.h"
-#include "AssetManager.h"
-#include "components/CameraComponent.h"
 #include "loaders/ModelAssetLoader.h"
 #include "loaders/ShaderAssetLoader.h"
+#include "log/Log.h"
+#include "log/loggers/ConsoleLogger.h"
+#include "log/loggers/FileLogger.h"
 #include "math/Transform.h"
 #include "math/Vector3.h"
 #include "render/Render.h"
 #include "render/Shader.h"
-#include "serialization/Serializer.h"
 
 
 GLFWwindow *initGlfw() {
@@ -59,6 +60,7 @@ bool initGlew(GLFWwindow *window) {
     return true;
 }
 
+
 int main() {
     GLFWwindow *window = initGlfw();
     if (window == nullptr) return -1;
@@ -69,6 +71,9 @@ int main() {
 
     ASSET_MANAGER.registerAssetLoader<Shader>(std::make_unique<ShaderAssetLoader>());
     ASSET_MANAGER.registerAssetLoader<Model>(std::make_unique<ModelAssetLoader>());
+
+    Log::getInstance().registerLogger(std::make_unique<ConsoleLogger>());
+    Log::getInstance().registerLogger(std::make_unique<FileLogger>());
 
     // test level data
     auto camera = world->spawnEntity<CameraEntity>();
