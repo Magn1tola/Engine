@@ -54,8 +54,11 @@ const FieldInfo *TypeInfo::getField(const std::string &fieldName) const {
     if (fields_.contains(fieldName)) {
         return &fields_.find(fieldName)->second;
     }
-    if (const auto fields = getAllFields(); fields.contains(fieldName)) {
-        return &fields.find(fieldName)->second;
+
+    for (const auto &baseClass: baseClasses_) {
+        if (const FieldInfo *field = baseClass->getField(fieldName)) {
+            return field;
+        }
     }
     return nullptr;
 }
@@ -64,8 +67,11 @@ const MethodInfo *TypeInfo::getMethod(const std::string &methodName) const {
     if (methodMap_.contains(methodName)) {
         return &methodMap_.find(methodName)->second;
     }
-    if (const auto methods = getAllMethods(); methods.contains(methodName)) {
-        return &methods.find(methodName)->second;
+
+    for (const auto &baseClass: baseClasses_) {
+        if (const MethodInfo *method = baseClass->getMethod(methodName)) {
+            return method;
+        }
     }
     return nullptr;
 }

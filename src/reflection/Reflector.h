@@ -66,14 +66,51 @@ public:
     static void registerField(const std::string &name, FieldType T::*field_ptr) {
         auto classInfo = getTypeInfo<T>();
         FieldInfo info(
-            [field_ptr](const void *obj) -> const void * {
-                return &(static_cast<const T *>(obj)->*field_ptr);
+            [field_ptr](void *obj) -> void * {
+                return &(static_cast<T *>(obj)->*field_ptr);
             },
             [field_ptr](void *obj, std::any value) {
                 static_cast<T *>(obj)->*field_ptr = std::any_cast<FieldType>(value);
             },
             name,
             typeid(FieldType)
+        );
+        classInfo->addField(info);
+    }
+
+    /**
+     * Registers a vector field for reflection with additional vector-specific functions
+     * @tparam T Class type containing the field
+     * @tparam ElementType Type of vector elements
+     * @param name Field name for reflection
+     * @param field_ptr Pointer-to-member for the vector field
+     */
+    template<typename T, typename ElementType>
+    static void registerField(const std::string &name, std::vector<ElementType> T::*field_ptr) {
+        auto classInfo = getTypeInfo<T>();
+        FieldInfo info(
+            [field_ptr](void *obj) -> void * {
+                return &(static_cast<T *>(obj)->*field_ptr);
+            },
+            [field_ptr](void *obj, std::any value) {
+                static_cast<T *>(obj)->*field_ptr = std::any_cast<std::vector<ElementType>>(value);
+            },
+            name,
+            typeid(std::vector<ElementType>),
+            typeid(ElementType),
+            [field_ptr](void *obj) -> size_t {
+                return (static_cast<T *>(obj)->*field_ptr).size();
+            },
+            [field_ptr](void *obj, size_t size) {
+                (static_cast<T *>(obj)->*field_ptr).resize(size);
+            },
+            [field_ptr](void *obj, size_t index) -> void * {
+                auto &vec = static_cast<T *>(obj)->*field_ptr;
+                if (index < vec.size()) {
+                    return &vec[index];
+                }
+                return nullptr;
+            }
         );
         classInfo->addField(info);
     }

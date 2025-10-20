@@ -11,12 +11,13 @@ include_directories(
 )
 
 set(ENGINE_MODULES
-        core
-        math
-        render
         assetManager
-        reflection
+        core
         log
+        math
+        reflection
+        render
+        serialization
         utils
 )
 
